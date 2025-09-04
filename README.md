@@ -7,6 +7,12 @@
 ![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size&color=brightgreen)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen?logo=github)
 ![Capstone Ready](https://img.shields.io/badge/Status-Capstone%20Ready-brightgreen?logo=checkmarx&logoColor=white)
+![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?logo=docker&logoColor=white)
+![Docs](https://img.shields.io/badge/Docs-Available-brightgreen?logo=readthedocs&logoColor=white)
+![Dashboard](https://img.shields.io/badge/Streamlit-Dashboard-brightgreen?logo=streamlit&logoColor=white)
+![API](https://img.shields.io/badge/FastAPI-Available-brightgreen?logo=fastapi&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking%20Enabled-brightgreen?logo=mlflow&logoColor=white)
+
 
 
 
