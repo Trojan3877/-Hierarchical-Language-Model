@@ -1,12 +1,12 @@
 ## 🚀 Tech Stack
+![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github)
+![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest)
 ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.2-red?logo=pytorch)
-![Transformers](https://img.shields.io/badge/Transformers-HuggingFace-yellow?logo=huggingface)
-![FastAPI](https://img.shields.io/badge/FastAPI-API-green?logo=fastapi)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit)
-![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-Helm-blue?logo=kubernetes)
-![License: MIT](https://img.shields.io/badge/License-MIT-green)
+![License: MIT](https://img.shields.io/github/license/Trojan3877/Hierarchical-Language-Model)
+![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/Hierarchical-Language-Model?logo=git&label=Last%20Commit)
+![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size)
+![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen?logo=github)
+
 
 ⚡ Features
 - Sentence-level encoder for local context  
