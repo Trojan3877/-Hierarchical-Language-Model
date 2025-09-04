@@ -44,5 +44,47 @@ Hierarchical-Language-Model/
 └── README.md
 
 
+---
+
+## 📚 Documentation
+
+For full details, see the docs folder:  
+
+- [📖 Project Overview](docs/overview.md)  
+- [⚙️ Usage Guide](docs/usage.md)  
+- [🏗️ System Design](docs/system_design.md)  
+
+---
+
+## 🔒 Policies & Standards
+- [📑 Changelog](CHANGELOG.md)  
+- [🛣️ Roadmap](ROADMAP.md)  
+- [📊 Project Status](PROJECT_STATUS.md)  
+- [📜 Code of Conduct](CODE_OF_CONDUCT.md)  
+- [🔒 Security Policy](SECURITY.md)  
+- [🤝 Contributing Guide](CONTRIBUTING.md)  
+- [📖 Citation](CITATION.cff)  
+
+---
+
+## 🛠️ Quick Start
+
+Clone the repo and check the [Usage Guide](docs/usage.md) for full instructions.  
+
+```bash
+git clone https://github.com/Trojan3877/Hierarchical-Language-Model.git
+cd Hierarchical-Language-Model
+pip install -r requirements.txt
+
+
+## 🔒 Policies & Standards
+- [📑 Changelog](CHANGELOG.md)  
+- [🛣️ Roadmap](ROADMAP.md)  
+- [📊 Project Status](PROJECT_STATUS.md)  
+- [📜 Code of Conduct](CODE_OF_CONDUCT.md)  
+- [🔒 Security Policy](SECURITY.md)  
+- [🤝 Contributing Guide](CONTRIBUTING.md)  
+- [📖 Citation](CITATION.cff)  
+
 # -Hierarchical-Language-Model
 This project implements a **Hierarchical Language Model (HLM)** that processes text at multiple levels of granularity.   The system uses sentence-level, paragraph-level, and document-level encoders to capture local and global context, producing richer representations for natural language tasks.  
