@@ -1,3 +1,37 @@
+<div align="center">
+
+# 🧠 Hierarchical Language Model (HLM)
+
+A **capstone-ready**, **production-aware** AI project that models text hierarchically:  
+Sentence → Paragraph → Document → Prediction  
+
+---
+
+### 📊 Project Health & Features
+
+![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github&color=brightgreen)
+![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest&color=brightgreen)
+![Python](https://img.shields.io/badge/Python-3.10-brightgreen?logo=python)
+![License: MIT](https://img.shields.io/github/license/Trojan3877/Hierarchical-Language-Model?color=brightgreen)
+![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/Hierarchical-Language-Model?logo=git&label=Last%20Commit&color=brightgreen)
+![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size&color=brightgreen)
+
+---
+
+### 🚀 Capstone & Deployment Readiness
+
+![Capstone Ready](https://img.shields.io/badge/Status-Capstone%20Ready-brightgreen?logo=checkmarx&logoColor=white)
+![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?logo=docker&logoColor=white)
+![Docs](https://img.shields.io/badge/Docs-Available-brightgreen?logo=readthedocs&logoColor=white)
+![Dashboard](https://img.shields.io/badge/Streamlit-Dashboard-brightgreen?logo=streamlit&logoColor=white)
+![API](https://img.shields.io/badge/FastAPI-Available-brightgreen?logo=fastapi&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking%20Enabled-brightgreen?logo=mlflow&logoColor=white)
+
+</div>
+
+---
+
+
 ## 🚀 Tech Stack
 ![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github&color=brightgreen)
 ![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest&color=brightgreen)
