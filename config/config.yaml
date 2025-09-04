@@ -1,0 +1,50 @@
+# config/config.yaml
+
+# =====================
+# Hierarchical Language Model Configuration
+# =====================
+
+# General
+project_name: "Hierarchical Language Model"
+random_seed: 42
+device: "cuda"  # options: "cuda", "cpu"
+
+# Sentence Encoder
+sentence_encoder:
+  model_name: "bert-base-uncased"
+  max_length: 128
+
+# Paragraph Encoder
+paragraph_encoder:
+  input_dim: 768        # matches BERT hidden size
+  hidden_dim: 512
+  num_layers: 1
+  bidirectional: true
+
+# Document Encoder
+document_encoder:
+  input_dim: 1024       # paragraph encoder output
+  hidden_dim: 512
+  num_layers: 1
+  bidirectional: true
+
+# Training
+training:
+  batch_size: 8
+  epochs: 5
+  learning_rate: 0.0001
+  optimizer: "adam"
+  loss_function: "cross_entropy"
+
+# Evaluation
+evaluation:
+  metrics: ["accuracy", "precision", "recall", "f1"]
+
+# API
+api:
+  host: "127.0.0.1"
+  port: 8000
+
+# Dashboard
+dashboard:
+  default_task: "document_classification"
