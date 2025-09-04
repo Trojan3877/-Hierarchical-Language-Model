@@ -1,77 +1,57 @@
 # dashboard/app.py
 
 """
-Streamlit Dashboard for Hierarchical Language Model (HLM)
----------------------------------------------------------
-Provides a simple UI for text input, model predictions,
-and visualization of evaluation metrics.
+Streamlit Demo for Hierarchical Language Model (HLM)
+----------------------------------------------------
+Provides a simple web interface to test document classification.
 """
 
 import streamlit as st
 import torch
-from src.train import HLM
-from src.evaluate import evaluate_model
+from src.sentence_encoder import SentenceEncoder
+from src.paragraph_encoder import ParagraphEncoder
+from src.document_encoder import DocumentEncoder
 
-# -----------------
-# Setup
-# -----------------
-st.set_page_config(page_title="Hierarchical Language Model Dashboard", layout="wide")
-st.title("🧠 Hierarchical Language Model (HLM) Dashboard")
-st.write("This dashboard allows interactive testing and visualization of the HLM.")
+# -----------------------
+# Load Model Components
+# -----------------------
+@st.cache_resource
+def load_model():
+    sent_encoder = SentenceEncoder()
+    para_encoder = ParagraphEncoder()
+    doc_encoder = DocumentEncoder()
+    return sent_encoder, para_encoder, doc_encoder
 
-# Load model (demo: untrained model — replace with trained weights later)
-model = HLM(num_classes=2)
-model.eval()
+sent_encoder, para_encoder, doc_encoder = load_model()
 
+# -----------------------
+# Streamlit UI
+# -----------------------
+st.set_page_config(page_title="HLM Demo", layout="centered")
+st.title("🧠 Hierarchical Language Model (HLM)")
+st.write("Capstone-ready demo: Sentence → Paragraph → Document → Prediction")
 
-# -----------------
-# Sidebar Controls
-# -----------------
-st.sidebar.header("⚙️ Settings")
-task = st.sidebar.selectbox("Choose Task", ["Document Classification"])
+# Text input
+user_text = st.text_area("Enter a document for classification:", height=200)
 
-# -----------------
-# Document Input
-# -----------------
-st.subheader("📄 Input Document")
-st.markdown("Enter text organized into paragraphs and sentences for classification.")
+if st.button("Run Prediction") and user_text.strip():
+    with st.spinner("Encoding text..."):
+        # Dummy pipeline (for demo only) – split into sentences and paragraphs
+        sentences = [user_text.split(".")]
+        paragraphs = [sentences]
 
-# Example input format
-example = [
-    [
-        ["The food was delicious.", "The service was excellent."],
-        ["I would definitely recommend this place.", "The atmosphere was great."]
-    ]
-]
-
-user_input = st.text_area(
-    "Enter a nested JSON-like structure (paragraphs -> sentences).",
-    value=str(example),
-    height=200
-)
-
-# -----------------
-# Prediction
-# -----------------
-if st.button("🔮 Run Prediction"):
-    try:
-        # Convert string input into Python list
-        documents = eval(user_input)
-
+        # Encode (simplified)
         with torch.no_grad():
-            outputs = model(documents)
-            predictions = torch.argmax(outputs, dim=1).tolist()
+            sent_embs = sent_encoder(sentences[0])
+            para_emb = para_encoder(sent_embs.unsqueeze(0))
+            doc_emb = doc_encoder(para_emb.unsqueeze(0))
 
-        st.success(f"Prediction Results: {predictions}")
+        # Fake prediction head (random for now until model trained)
+        prediction = torch.sigmoid(torch.randn(1)).item()
+        label = "Positive" if prediction > 0.5 else "Negative"
 
-    except Exception as e:
-        st.error(f"Error processing input: {e}")
+    st.success(f"Prediction: **{label}** (score={prediction:.2f})")
 
-# -----------------
-# Metrics Visualization (Placeholder)
-# -----------------
-st.subheader("📊 Evaluation Metrics")
-st.write("Placeholder metrics until a trained model is evaluated.")
+    st.write("🔍 Embedding Shape:", doc_emb.shape)
+    st.caption("Note: This is a demo. Replace with trained model weights for real predictions.")
 
-dummy_metrics = {"accuracy": 0.91, "precision": 0.90, "recall": 0.89, "f1": 0.90}
-st.json(dummy_metrics)
