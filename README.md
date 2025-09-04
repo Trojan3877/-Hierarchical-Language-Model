@@ -1,11 +1,12 @@
 <div align="center">
 
+<img src="assets/logo.png" alt="Hierarchical Language Model Logo" width="120"/>
+
 # 🧠 Hierarchical Language Model (HLM)
 
 A **capstone-ready**, **production-aware** AI project that models text hierarchically:  
 Sentence → Paragraph → Document → Prediction  
 
----
 
 ### 📊 Project Health & Features
 
