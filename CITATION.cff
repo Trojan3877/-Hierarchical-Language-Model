@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Hierarchical Language Model (HLM)"
+message: "If you use this project, please cite it as below."
+authors:
+  - family-names: "Leath"
+    given-names: "Corey"
+version: "1.0.0"
+date-released: "2025-08-27"
+repository-code: "https://github.com/Trojan3877/Hierarchical-Language-Model"
+license: "MIT"
