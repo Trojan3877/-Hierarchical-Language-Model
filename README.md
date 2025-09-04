@@ -1,10 +1,10 @@
 ## 🚀 Tech Stack
-![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github)
-![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest)
-![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
-![License: MIT](https://img.shields.io/github/license/Trojan3877/Hierarchical-Language-Model)
-![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/Hierarchical-Language-Model?logo=git&label=Last%20Commit)
-![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size)
+![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github&color=brightgreen)
+![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest&color=brightgreen)
+![Python](https://img.shields.io/badge/Python-3.10-brightgreen?logo=python)
+![License: MIT](https://img.shields.io/github/license/Trojan3877/Hierarchical-Language-Model?color=brightgreen)
+![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/Hierarchical-Language-Model?logo=git&label=Last%20Commit&color=brightgreen)
+![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size&color=brightgreen)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen?logo=github)
 
 
