@@ -17,3 +17,17 @@ docker-build:
 
 docker-run:
 	docker run -p 8000:8000 hlm:latest
+
+.PHONY: ingest api dash
+
+# Build vector index from docs/ and data/
+ingest:
+\tpython -m src.ingest --folders data docs
+
+# Run FastAPI API
+api:
+\tuvicorn api.main:app --reload --port 8080
+
+# Run Streamlit dashboard
+dash:
+\tstreamlit run dashboard/rag_app.py
