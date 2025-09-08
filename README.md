@@ -10,14 +10,22 @@ Sentence → Paragraph → Document → Prediction
 
 ### 📊 Project Health & Features
 
-![Build](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Build&logo=github&color=brightgreen)
-![Tests](https://img.shields.io/github/actions/workflow/status/Trojan3877/Hierarchical-Language-Model/ci.yml?branch=main&label=Tests&logo=pytest&color=brightgreen)
-![Python](https://img.shields.io/badge/Python-3.10-brightgreen?logo=python)
-![License: MIT](https://img.shields.io/github/license/Trojan3877/Hierarchical-Language-Model?color=brightgreen)
-![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/Hierarchical-Language-Model?logo=git&label=Last%20Commit&color=brightgreen)
-![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/Hierarchical-Language-Model?logo=github&label=Repo%20Size&color=brightgreen)
+# Hierarchical Language Model (HLM)
 
----
+![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.34+-FF4B4B.svg)
+![LangChain](https://img.shields.io/badge/LangChain-0.2+-purple.svg)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow.svg)
+![Docker](https://img.shields.io/badge/Docker-ready-0db7ed.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![CI](https://github.com/Trojan3877/-Hierarchical-Language-Model/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/codecov/c/github/Trojan3877/-Hierarchical-Language-Model)
+![Stars](https://img.shields.io/github/stars/Trojan3877/-Hierarchical-Language-Model?style=social)
+![Forks](https://img.shields.io/github/forks/Trojan3877/-Hierarchical-Language-Model?style=social)
+
+> A modular Hierarchical Language Model with Hugging Face + LangChain RAG integration.
+
 
 ### 🚀 Capstone & Deployment Readiness
 
