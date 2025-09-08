@@ -68,6 +68,41 @@ Sentence → Paragraph → Document → Prediction
 - Deployment-ready with **Docker** + **Kubernetes (Helm)**  
 
 Architecture
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    subgraph Input
+        Q[User Question]
+    end
+
+    subgraph Retrieval
+        VS[FAISS Vector Store]
+        EMB[Sentence-Transformer Embeddings]
+        Q --> EMB --> VS
+        VS -->|Top-k Docs| CTX[Context Chunks]
+    end
+
+    subgraph HLM
+        SENC[Sentence Encoder]
+        PENC[Paragraph Encoder]
+        DENC[Document Encoder]
+        CTX --> SENC --> PENC --> DENC
+        DENC --> HCXT[Hierarchical Context]
+    end
+
+    subgraph Generation
+        HF[Hugging Face Model]
+        HCXT --> HF
+        HF --> A[Answer]
+    end
+
+    subgraph API/UI
+        API[FastAPI Endpoint]
+        UI[Streamlit Dashboard]
+        A --> API
+        A --> UI
+    end
 
 ```mermaid
 flowchart TD
