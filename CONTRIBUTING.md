@@ -1,14 +1,38 @@
-# Contributing to HLM
+# Contributing to Hierarchical-Language-Model
 
-Thanks for your interest! Please follow these steps:
+## How to Contribute
+1. Fork the repository
+2. Create a feature branch
+3. Add tests
+4. Submit a PR
 
-1. Fork the repo
-2. Create a new branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -m 'Added feature'`)
-4. Push the branch (`git push origin feature-name`)
-5. Open a Pull Request
+## Code Style
+- Python 3.10+
+- PEP8 compliance
+- Type hints required
 
-Before submitting, ensure:
-- Code is formatted (PEP8)
-- Tests pass (`pytest tests/`)
-- README and docs are updated
+## Workflows
+Use MLflow UI to track experiments:
+```bash
+mlflow ui
+
+---
+
+# 8️⃣ — Tests
+
+### 📁 `tests/test_api.py`
+
+```python
+from fastapi.testclient import TestClient
+from api.main import app
+
+client = TestClient(app)
+
+def test_health():
+    res = client.get("/health")
+    assert res.status_code == 200
+
+def test_generate():
+    res = client.post("/generate", json={"prompt": "Hello", "max_tokens": 10})
+    assert res.status_code == 200
+    assert "output" in res.json()
