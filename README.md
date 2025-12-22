@@ -30,11 +30,11 @@ Big-Tech-style documentation
 
 This repository is intentionally built to meet or exceed L6–L7 expectations at companies like Microsoft, Amazon, Google, Meta, OpenAI, DeepMind, Tesla, Waymo, and Stripe.
 
-🏗️ System Architecture (AI-Generated)
+ System Architecture 
 
-📷 Architecture Diagram (PNG)
+📷 Architecture Diagram 
 
-Upload this file to /docs/architecture.png and embed it as shown below.
+
 
 docs/architecture.png
 
