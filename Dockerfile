@@ -1,25 +1,14 @@
-# Use a slim Python base
-FROM python:3.11-slim
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
 WORKDIR /app
-
-# Install system deps for FAISS & transformers
-RUN apt-get update && apt-get install -y \
-    git build-essential libsndfile1 ffmpeg \
- && rm -rf /var/lib/apt/lists/*
-
-# Install requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Cache dir for sentence-transformers
-ENV SENTENCE_TRANSFORMERS_HOME=/root/.cache/sentencetransformers
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install -r requirements.txt
 
-# Copy the app
 COPY . .
 
-# Expose FastAPI port
-EXPOSE 8080
-
-# Default entrypoint for API
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
