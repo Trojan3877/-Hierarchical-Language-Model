@@ -1,25 +1,14 @@
-# api/main.py
 from fastapi import FastAPI
-from pydantic import BaseModel
-import os
-from src.chains.rag import build_chain
+from api.schemas import PromptRequest, PromptResponse
+from api.inference import llm_engine
 
-GENERATION_MODEL = os.getenv("GENERATION_MODEL", "google/flan-t5-base")
+app = FastAPI(title="Hierarchical Language Model API")
 
-app = FastAPI(title="HLM + Hugging Face + LangChain API")
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
 
-class QueryIn(BaseModel):
-    question: str
-
-class QueryOut(BaseModel):
-    answer: str
-
-@app.get("/healthz")
-def healthz():
-    return {"ok": True}
-
-@app.post("/v1/rag/query", response_model=QueryOut)
-def rag_query(q: QueryIn):
-    chain = build_chain(GENERATION_MODEL)
-    out = chain.invoke(q.question)
-    return QueryOut(answer=out["answer"])
+@app.post("/generate", response_model=PromptResponse)
+def generate_text(request: PromptRequest):
+    output = llm_engine.generate(request.prompt, max_new_tokens=request.max_tokens)
+    return {"output": output}
