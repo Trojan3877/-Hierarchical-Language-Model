@@ -1,0 +1,25 @@
+Hierarchical-Language-Model/
+├── api/
+│   ├── main.py
+│   ├── schemas.py
+│   └── inference.py
+├── model/
+│   └── llm_model/
+├── workflows/
+│   └── n8n/
+│       └── llm_workflow.json
+├── mlflow/
+│   └── tracking/
+├── docs/
+│   └── architecture.png
+├── tests/
+│   └── test_api.py
+├── metrics.md
+├── dailylog.md
+├── CONTRIBUTING.md
+├── requirements.txt
+├── Dockerfile
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── README.md
