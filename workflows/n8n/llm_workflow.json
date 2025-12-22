@@ -1,0 +1,16 @@
+{
+  "name": "LLM Inference + Logging",
+  "nodes": [
+    {
+      "name": "HTTP Trigger",
+      "type": "n8n-nodes-base.webhook"
+    },
+    {
+      "name": "LLM Inference",
+      "type": "n8n-nodes-base.executeCommand",
+      "parameters": {
+        "command": "curl -X POST http://localhost:8000/generate -H 'Content-Type: application/json' -d '{\"prompt\": \"test\"}'"
+      }
+    }
+  ]
+}
