@@ -1,16 +1,18 @@
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-API-green.svg)
-![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)
-![CUDA](https://img.shields.io/badge/NVIDIA-CUDA%2012.1-brightgreen.svg)
-![LLM](https://img.shields.io/badge/LLM-Llama%203-red.svg)
-![MLflow](https://img.shields.io/badge/MLflow-Tracking-orange.svg)
-![CI](https://img.shields.io/badge/CI-GitHub_Actions-black.svg)
-![Status](https://img.shields.io/badge/Status-Production_Ready-success.svg)
-![System Design](https://img.shields.io/badge/System%20Design-Enterprise_Level-purple.svg)
-![Engineering Level](https://img.shields.io/badge/Engineering%20Level-L7-purple.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+![Transformers](https://img.shields.io/badge/Transformers-Architecture-orange)
+![Hierarchical LLM](https://img.shields.io/badge/LLM-Hierarchical%20Reasoning-red)
+![NLP](https://img.shields.io/badge/NLP-Advanced-purple)
+![Representation Learning](https://img.shields.io/badge/Learning-Embeddings-blue)
+![AI System](https://img.shields.io/badge/System-LLM%20Pipeline-green)
+![Research](https://img.shields.io/badge/Type-AI%20Research-critical)
+![Production Ready](https://img.shields.io/badge/Level-Advanced%20AI-black)
+![Status](https://img.shields.io/badge/Status-Portfolio%20Ready-brightgreen)
+![Last Commit](https://img.shields.io/github/last-commit/Trojan3877/-Hierarchical-Language-Model)
+![Repo Size](https://img.shields.io/github/repo-size/Trojan3877/-Hierarchical-Language-Model)
+![Stars](https://img.shields.io/github/stars/Trojan3877/-Hierarchical-Language-Model?style=social)
 
 
-Overview
+
 
 Hierarchical-Language-Model is a production-grade AI system designed to demonstrate enterprise-level LLM engineering, combining:
 
