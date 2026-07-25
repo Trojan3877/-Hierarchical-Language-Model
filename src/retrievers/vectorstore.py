@@ -26,6 +26,17 @@ def vectorstore_backend() -> str:
     return backend
 
 
+def _resolve_backend(backend: str | None) -> str:
+    selected_backend = backend or vectorstore_backend()
+    selected_backend = selected_backend.strip().lower()
+    if selected_backend not in SUPPORTED_BACKENDS:
+        supported = ", ".join(sorted(SUPPORTED_BACKENDS))
+        raise ValueError(
+            f"Unsupported vector store backend {selected_backend!r}; use {supported}."
+        )
+    return selected_backend
+
+
 def _pinecone_config() -> tuple[str, str]:
     api_key = os.getenv("PINECONE_API_KEY", "").strip()
     index_name = os.getenv("PINECONE_INDEX_NAME", "").strip()
@@ -76,7 +87,7 @@ def save_index(
     backend: str | None = None,
 ) -> None:
     """Persist documents to FAISS locally or Pinecone when explicitly selected."""
-    selected_backend = backend or vectorstore_backend()
+    selected_backend = _resolve_backend(backend)
     embeddings = _embeddings(embedding_model)
     documents = list(docs)
 
@@ -103,7 +114,7 @@ def load_index(
     backend: str | None = None,
 ):
     """Load the configured local FAISS or hosted Pinecone vector store."""
-    selected_backend = backend or vectorstore_backend()
+    selected_backend = _resolve_backend(backend)
     embeddings = _embeddings(embedding_model)
 
     if selected_backend == "pinecone":
