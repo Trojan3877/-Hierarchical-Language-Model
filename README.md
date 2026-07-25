@@ -97,6 +97,35 @@ benchmark-results.json  Recorded benchmark output
 metrics.md              Research metrics and quality summary
 ```
 
+## Pinecone vector retrieval
+
+The RAG layer supports two interchangeable vector-store backends:
+
+| Backend | Use case | Credentials |
+|---|---|---|
+| `faiss` (default) | Offline development, CI, and reproducible local experiments | None |
+| `pinecone` | Hosted retrieval for a deployed service | `PINECONE_API_KEY`, index name, and namespace |
+
+Pinecone is opt-in. Create a Pinecone index whose dimension matches the configured embedding model, then configure the environment without committing secrets:
+
+```bash
+cp .env.example .env
+# Set these values in .env or your deployment secret store:
+VECTORSTORE_BACKEND=pinecone
+PINECONE_API_KEY=***
+PINECONE_INDEX_NAME=hlm-documents
+PINECONE_NAMESPACE=hlm-documents
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+```
+
+The embedding model above produces 384-dimensional vectors; the Pinecone index must use the same dimension and a compatible cosine metric. Ingest documents into the configured namespace:
+
+```bash
+python -m src.ingest --folders data docs
+```
+
+The existing `src/chains/rag.py` chain automatically loads the selected backend. Keep `VECTORSTORE_BACKEND=faiss` for local tests and CI; Pinecone credentials are never required for the deterministic fallback path. Pinecone network errors should be handled by the deployment's readiness and retry policy before exposing the RAG endpoint publicly.
+
 ## Research Metrics And Benchmarks
 
 Latest recorded benchmark command:

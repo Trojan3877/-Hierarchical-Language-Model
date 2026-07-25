@@ -1,9 +1,17 @@
 # src/ingest.py
 import argparse
-from src.retrievers.vectorstore import build_documents_from_folder, save_index
+
+from src.retrievers.vectorstore import (
+    build_documents_from_folder,
+    save_index,
+    vectorstore_backend,
+)
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Build FAISS index from local documents.")
+    parser = argparse.ArgumentParser(
+        description="Build a local FAISS or hosted Pinecone index from documents."
+    )
     parser.add_argument(
         "--folders",
         nargs="+",
@@ -17,11 +25,19 @@ def main():
         all_docs.extend(build_documents_from_folder(folder))
 
     if not all_docs:
-        print("⚠️ No documents found to index.")
+        print("No documents found to index.")
         return
 
+    backend = vectorstore_backend()
     save_index(all_docs)
-    print(f"✅ Indexed {len(all_docs)} docs into data/index.faiss")
+    if backend == "pinecone":
+        print(
+            f"Indexed {len(all_docs)} documents into Pinecone "
+            "using PINECONE_INDEX_NAME/PINECONE_NAMESPACE."
+        )
+    else:
+        print(f"Indexed {len(all_docs)} documents into data/index.faiss.")
+
 
 if __name__ == "__main__":
     main()
