@@ -3,6 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
 ![PyTorch](https://img.shields.io/badge/PyTorch-Hierarchical%20Encoders-ee4c2c?logo=pytorch)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi)
+[![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20Store-00A98F?logo=pinecone&logoColor=white)](https://www.pinecone.io/)
 ![CI](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/actions/workflows/ci.yml/badge.svg)
 ![Status](https://img.shields.io/badge/Status-Research%20Hardened-brightgreen)
 
@@ -98,6 +99,9 @@ metrics.md              Research metrics and quality summary
 ```
 
 ## Pinecone vector retrieval
+
+> Hosted retrieval is available through Pinecone, while FAISS remains the default offline backend for tests and local development.
+
 
 The RAG layer supports two interchangeable vector-store backends:
 
