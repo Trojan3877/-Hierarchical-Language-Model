@@ -5,7 +5,7 @@ import os
 import pathlib
 from typing import Iterable, List
 
-from langchain.docstore.document import Document
+from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 
