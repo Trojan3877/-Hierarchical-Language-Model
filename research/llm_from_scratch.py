@@ -121,7 +121,9 @@ class DecoderLM(nn.Module):
         logits = self.lm_head(self.final_norm(hidden))
         result = {"logits": logits}
         if labels is not None:
-            result["loss"] = F.cross_entropy(logits.reshape(-1, logits.size(-1)), labels.reshape(-1))
+            result["loss"] = F.cross_entropy(
+                logits.reshape(-1, logits.size(-1)), labels.reshape(-1)
+            )
         return result
 
     @property
@@ -132,9 +134,7 @@ class DecoderLM(nn.Module):
 def deterministic_batch(spec: ModelSpec, batch_size: int, device: str) -> tuple[Tensor, Tensor]:
     """Create a fixed synthetic next-token task; no external corpus is implied."""
 
-    tokens = torch.randint(
-        0, spec.vocab_size, (batch_size, spec.context_length + 1), device=device
-    )
+    tokens = torch.randint(0, spec.vocab_size, (batch_size, spec.context_length + 1), device=device)
     return tokens[:, :-1], tokens[:, 1:]
 
 
