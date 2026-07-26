@@ -38,16 +38,19 @@ jobs:
           python -m pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Tier 4 - Static lint
-        run: ruff check api hierarchical_lm benchmarks tests
+        run: ruff check api hierarchical_lm benchmarks research tests
 
       - name: Tier 5 - Format verification
-        run: ruff format --check api hierarchical_lm benchmarks tests
+        run: ruff format --check api hierarchical_lm benchmarks research tests
 
       - name: Tier 6 - Python import compilation
-        run: python -m compileall -q api hierarchical_lm benchmarks tests
+        run: python -m compileall -q api hierarchical_lm benchmarks research tests
 
       - name: Tier 7 - Unit, API contract, and coverage tests
         run: pytest --cov=api --cov=hierarchical_lm --cov-report=term-missing
+
+      - name: Tier 7b - From-scratch LLM smoke test
+        run: python research/llm_from_scratch.py --mode smoke --steps 2 --device cpu --output /tmp/llm-smoke.json
 
       - name: Tier 8 - Benchmark JSON generation and validation
         run: |
