@@ -41,9 +41,7 @@ jobs:
         run: ruff check api hierarchical_lm benchmarks research tests
 
       - name: Tier 5 - Format verification
-        run: |
-          ruff format --diff api hierarchical_lm benchmarks research tests
-          ruff format --check api hierarchical_lm benchmarks research tests
+        run: ruff format --check api hierarchical_lm benchmarks research tests
 
       - name: Tier 6 - Python import compilation
         run: python -m compileall -q api hierarchical_lm benchmarks research tests
