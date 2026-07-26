@@ -3,6 +3,14 @@
 This log records notable architecture, deployment, and quality-system updates for the
 Hierarchical Language Model repository.
 
+## 2026-07-25 - Pinecone Retrieval Engineering Practice
+
+- Added an opt-in Pinecone vector-store backend in [PR #7](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/pull/7) while retaining FAISS as the default for offline development and CI.
+- Added explicit index and namespace configuration through deployment environment variables; Pinecone credentials remain outside source control.
+- Preserved deterministic backend-selection tests and documented the embedding-dimension/index compatibility requirement.
+- Opened [issue #8](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/issues/8) to track the operating practice: secret handling, namespace isolation, readiness/retry behavior, rollback to FAISS, and separate Pinecone quality/latency/error/cost benchmarks.
+- Current boundary: Pinecone is an integration path, not a production authorization; deployment evidence and hosted retrieval benchmarks remain required.
+
 ## 2026-07-13
 
 - Added deterministic benchmark capture for tokenizer, dataset, model forward pass, and API fallback paths.

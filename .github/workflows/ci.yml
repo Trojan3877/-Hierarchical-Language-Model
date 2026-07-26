@@ -56,7 +56,23 @@ jobs:
 
       - name: Tier 9 - Deployment and security hygiene
         run: |
-          docker build -t hlm:${{ github.sha }} .
+          set -euo pipefail
+
+          # Docker Hub metadata lookups can transiently time out on hosted runners.
+          # Retry the build without masking a persistent build failure.
+          for attempt in 1 2 3; do
+            if docker build -t hlm:${{ github.sha }} .; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "Docker build failed after $attempt attempts."
+              exit 1
+            fi
+            delay=$((attempt * 15))
+            echo "Docker build attempt $attempt failed; retrying in $delay seconds."
+            sleep "$delay"
+          done
+
           bandit -r api hierarchical_lm benchmarks -ll
           pip-audit --cache-dir .pip-audit-cache -r requirements.txt
 
