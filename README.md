@@ -1,114 +1,116 @@
 # Hierarchical Language Model
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
-![PyTorch](https://img.shields.io/badge/PyTorch-Hierarchical%20Encoders-ee4c2c?logo=pytorch)
-![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi)
-[![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20Store-00A98F?logo=pinecone&logoColor=white)](https://www.pinecone.io/)
-![CI](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/actions/workflows/ci.yml/badge.svg)
-![Status](https://img.shields.io/badge/Status-Research%20Hardened-brightgreen)
+[![CI](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/actions/workflows/ci.yml)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-hierarchical%20encoders-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Benchmark](https://img.shields.io/badge/benchmark-JSON%20evidence-2563EB)](benchmark-results.json)
+[![GHCR](https://img.shields.io/badge/GHCR-release%20image-2496ED?logo=docker&logoColor=white)](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/pkgs/container/hierarchical-language-model)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
-Hierarchical Language Model is a research-oriented PyTorch and FastAPI project for
-document representation learning. It demonstrates a token-to-sentence-to-document
-pipeline with deterministic tests, API contract validation, benchmark capture, and
-deployment hygiene suitable for continued production hardening.
+A research-oriented PyTorch and FastAPI repository for hierarchical document representation and small-scale language-model systems experiments. The verified core path is a token-to-sentence-to-document model with deterministic tests, machine-readable benchmarks, a safe API path, and container build validation. A separate from-scratch decoder-only language-model harness is included for inspectable research experiments.
 
-The live Hugging Face generation path is intentionally opt-in. Local tests and CI use
-safe deterministic paths so the project remains reproducible without gated model
-credentials, GPU hardware, or large model downloads.
+> **Evidence boundary:** this repository does not claim frontier-language-model quality, production SLOs, internet-scale serving, regulatory readiness, or large-corpus model quality. Numerical claims below are limited to checked-in tests and benchmark artifacts.
 
+## What is verified
 
-## Production Readiness Guide
+- hierarchical tokenization and tensor-shape contracts
+- compact PyTorch hierarchical model forward path
+- deterministic FastAPI fallback/API contract behavior
+- CPU from-scratch LLM smoke experiments
+- deterministic benchmark JSON generation and validation
+- Ruff lint/format, import compilation, pytest coverage, Docker build, Bandit, and `pip-audit` in CI
+- local FAISS-oriented retrieval path with Pinecone as an opt-in external backend
+- Python 3.11 container build
 
-> This section is the portfolio audit entry point for **-Hierarchical-Language-Model**. It describes an engineering promotion path; it is not a claim that the repository is already production-authorized.
+## What is not claimed
 
-[![CI](https://img.shields.io/github/actions/workflow/status/CoreyLeath-code/-Hierarchical-Language-Model/ci.yml?branch=main&label=CI)](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/actions) [![License](https://img.shields.io/github/license/CoreyLeath-code/-Hierarchical-Language-Model)](https://github.com/CoreyLeath-code/-Hierarchical-Language-Model/blob/main/LICENSE)
+- frontier-model language quality or general reasoning ability
+- distributed training or multi-node inference as a verified runtime path
+- production concurrency, autoscaling, SLOs, or capacity numbers
+- Pinecone availability/performance in CI
+- safety certification or comprehensive red-team coverage
+- model-quality conclusions from synthetic smoke data
 
-### Architecture flowchart
+## Architecture flowchart
 
 ```mermaid
 flowchart LR
-    Input --> Validate[Schema + data checks] --> Model[Versioned model] --> Serve[API / dashboard] --> Observe[Metrics + drift]
+    Text["Document text"] --> Tok["HierarchicalTokenizer"]
+    Tok --> Tensor["Token tensor: batch x sentences x sequence"]
+    Tensor --> Enc["Token / sentence encoder"]
+    Enc --> Doc["Document GRU / document representation"]
+    Doc --> Head["Classifier / representation output"]
+    Text --> API["FastAPI generation gateway"]
+    API --> Safe["Deterministic safe fallback"]
+    API --> Live["Optional live Hugging Face model"]
+    Live --> Flag["HLM_ENABLE_LIVE_MODEL=true"]
 ```
 
-### Quickstart and local validation
+## System design flow
 
-The supported local path should be reproducible from a clean checkout. The inferred stack for this repository is **Python/ML**.
+```mermaid
+flowchart TD
+    Client["Client or experiment"] --> Boundary{"Execution boundary"}
+    Boundary -->|Document model| Validate["Validate / normalize input"]
+    Validate --> Tokenize["Hierarchical tokenization"]
+    Tokenize --> Model["PyTorch hierarchical model"]
+    Model --> Result["Representation / logits"]
+
+    Boundary -->|Generation API| Gateway["FastAPI /generate"]
+    Gateway --> Mode{"Live model enabled?"}
+    Mode -->|No| Fallback["Deterministic fallback"]
+    Mode -->|Yes| HF["Configured Hugging Face model"]
+    HF --> Gen["Generated response"]
+
+    Boundary -->|Retrieval prototype| Embed["Embedding model"]
+    Embed --> Store{"Vector backend"}
+    Store -->|Default| FAISS["FAISS"]
+    Store -->|Opt-in| Pinecone["Pinecone"]
+
+    Result --> Evidence["Tests / benchmark artifacts"]
+    Fallback --> Evidence
+    Gen --> Evidence
+```
+
+The CI-supported core is intentionally narrower than the full research surface. Prototype retrieval, dashboard, and live-model paths are not treated as equivalent to the deterministic core.
+
+## Quick Start
+
+### 1. Clone and create an environment
 
 ```bash
-python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-pytest -q
+git clone https://github.com/CoreyLeath-code/-Hierarchical-Language-Model.git
+cd -- -Hierarchical-Language-Model
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt -r requirements-dev.txt
 ```
 
-If the project uses external services, model artifacts, cloud credentials, or private data, start them through documented local fixtures or mocks. Never place secrets or identifiable records in the repository.
+PowerShell activation:
 
-### Research-style metrics and benchmarks
-
-| Evidence | Required record |
-|---|---|
-| Correctness | Test command, commit SHA, runtime, and pass/fail result |
-| Performance | Warm-up, sample count, concurrency, median, p95, p99, throughput, and memory |
-| Data/model quality | Dataset version, split strategy, leakage controls, calibration, subgroup results, and uncertainty |
-| Runtime | Image digest, health-check latency, resource limits, and rollback target |
-| Security | Dependency, secret, SAST, container, and SBOM results |
-
-A benchmark number belongs in a versioned artifact tied to a commit and hardware/runtime description. Engineering benchmarks must not be presented as clinical, financial, safety, or model-quality validation without the appropriate domain evidence.
-
-### Extended Q&A
-
-**What is production-ready for this repository?**  
-A reproducible build, tested public contract, controlled configuration, observable runtime, documented security boundary, versioned artifacts, and a tested rollback path.
-
-**What must remain explicit?**  
-The intended use, excluded use, data/credential handling, model or algorithm limitations, and which metrics are measured versus aspirational.
-
-**What should be completed next?**  
-Use the linked production-readiness issue for this repository as the checklist. Resolve missing tests, deployment instructions, observability, supply-chain controls, and release evidence before attaching a production claim.
-
-
-
-## From-Scratch LLM Architecture Research
-
-![LLM Architecture](https://img.shields.io/badge/LLM%20Architecture-Decoder%20Transformer-7c3aed)
-![Research Protocol](https://img.shields.io/badge/Research-Reproducible%20Protocol-2563eb)
-![Scaling Laws](https://img.shields.io/badge/Scaling%20Laws-Data%20%2B%20Compute-f59e0b)
-![Post-Training](https://img.shields.io/badge/Post--Training-SFT%20%2B%20Preference-059669)
-
-This repository now contains a small decoder-only language model built from first
-principles alongside the existing hierarchical document model. The goal is to make every
-path inspectable: raw-data governance, tokenization, causal attention, scaling experiments,
-post-training evaluation, retrieval grounding, serving, and release gates.
-
-The implementation is intentionally small and honest. It is a systems and research
-reference that can run on CPU; it does not claim frontier capability or substitute for
-large-scale safety evaluation.
-
-### Architecture path
-
-```mermaid
-flowchart LR
-    Data[Licensed data + manifest] --> Clean[Normalize / deduplicate / PII review]
-    Clean --> Tokenize[Tokenizer + frozen vocabulary]
-    Tokenize --> Shards[Hashed token shards]
-    Shards --> Train[PyTorch decoder LM]
-    Train --> Eval[Held-out loss + safety suite]
-    Eval --> SFT[SFT]
-    SFT --> Pref[Preference optimization]
-    Pref --> Registry[Model card + immutable artifact]
-    Registry --> Serve[FastAPI / vLLM path]
-    Serve --> Observe[p50 p95 p99 + drift + feedback]
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
-| Path | Technology | Design decision |
-|---|---|---|
-| Data | JSONL manifests, SHA-256, deterministic Python filters | Every source has license, provenance, PII, and hash evidence |
-| Model | PyTorch, RMSNorm, causal SDPA, SwiGLU, residual blocks | Small modules expose the math and preserve a clean upgrade path |
-| Scale | single process → AMP/checkpointing → DDP → FSDP/ZeRO | Promote only when correctness and evaluation remain invariant |
-| Post-training | SFT, DPO-style preference experiments, tool/RAG grounding | Compare checkpoints on the same frozen eval suite |
-| Serving | FastAPI contract first; vLLM/TGI as the scale path | Local reproducibility precedes continuous batching |
-| Retrieval | FAISS default; Pinecone opt-in | CI has no credential/network dependency |
-| Evidence | JSON artifacts with seed, config, environment, percentiles | Measured values stay separate from aspirational targets |
+### 2. Run the deterministic validation path
 
-### Run the from-scratch model
+```bash
+ruff check api hierarchical_lm benchmarks research tests
+ruff format --check api hierarchical_lm benchmarks research tests
+pytest --cov=api --cov=hierarchical_lm --cov-report=term-missing
+python -m compileall -q api hierarchical_lm benchmarks research tests
+```
+
+### 3. Run the benchmark harness
+
+```bash
+python benchmarks/benchmark_hlm.py --iterations 100 --output benchmark-results.json
+python -m json.tool benchmark-results.json
+```
+
+### 4. Run the from-scratch LLM smoke experiment
 
 ```bash
 python research/llm_from_scratch.py \
@@ -118,115 +120,117 @@ python research/llm_from_scratch.py \
   --output artifacts/llm-smoke.json
 ```
 
-The smoke test reports parameter count, initial/final loss, seed, Python/PyTorch versions,
-device, and whether the loss decreased. It uses synthetic next-token data only for plumbing
-validation; that result is not a language-quality benchmark.
+Synthetic smoke data validates plumbing and optimization behavior only; it is not evidence of language quality.
 
-Run the hardware-aware latency harness:
+### 5. Run the API safely
 
 ```bash
-python research/llm_from_scratch.py \
-  --mode benchmark \
-  --iterations 30 \
-  --batch-size 2 \
-  --device cpu \
-  --output artifacts/llm-benchmark.json
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Each artifact records warm-up behavior, model dimensions, parameter count, median/p95/p99
-latency, tokens/second, OS, runtime, and seed. Repeat the same command on each hardware
-target; do not compare CPU and GPU numbers without labeling the environment.
+The live Hugging Face path remains opt-in:
 
-### Scaling-law research contract
-
-Use the small/medium/large grid below as an experiment plan, not as pre-filled evidence:
-
-| Variant | Layers | Width | Heads | Context | Required evidence |
-|---|---:|---:|---:|---:|---|
-| S | 2 | 128 | 4 | 128 | held-out loss, tokens, wall time |
-| M | 4 | 256 | 8 | 256 | same data protocol and optimizer |
-| L | 8 | 512 | 8 | 512 | same eval, memory, and failure record |
-
-A valid study reports parameter count `N`, training tokens `D`, total FLOPs, hardware,
-peak memory, final held-out loss, train/validation gap, and fit residuals. Only after several
-points exist should a declared function such as
-`L(N,D) = E + A/N^alpha + B/D^beta` be fitted with confidence intervals. A single run,
-changed tokenizer, changed data mixture, or synthetic fixture cannot support a scaling-law
-claim.
-
-### Post-training and release path
-
-1. SFT on curated instruction data with assistant-only loss masking.
-2. Preference optimization with documented pair construction, annotator policy, ties, and
-   disagreement handling.
-3. Tool and retrieval grounding with recall@k, citation precision, and grounded-answer rate.
-4. Safety regression tests for refusals, jailbreaks, privacy leakage, and tool misuse.
-5. Model-card, SBOM, artifact-integrity, rollback, and ownership approval gates.
-
-### Research-style metrics
-
-| Area | Metrics required before claiming improvement |
-|---|---|
-| Optimization | train/validation loss, perplexity, seed count, confidence interval |
-| Efficiency | step time, tokens/s, peak memory, utilization, batch/context |
-| Serving | time-to-first-token, inter-token latency, p50/p95/p99, error rate |
-| Data | source hashes, token count, duplicate rate, PII findings, split policy |
-| Grounding | recall@k, MRR, citation precision, grounded-answer rate |
-| Safety | refusal precision/recall, jailbreak success, privacy probes, regressions |
-| Reliability | checkpoint restore, restart recovery, concurrency and load behavior |
-
-No numerical LLM quality score is populated in this README until the dataset, evaluation
-method, confidence interval, and reproducible artifact are checked in. The full data,
-architecture, scaling-law, post-training, and promotion-gate protocol is in
-[docs/llm-systems-research.md](docs/llm-systems-research.md).
-
-## Architecture
-
-```text
-Document text
-   |
-   v
-HierarchicalTokenizer
-   |
-   v
-[batch, max_sentences, max_seq_len]
-   |
-   v
-TokenEncoder -> Document GRU -> Classifier logits
-
-FastAPI /generate
-   |
-   +-- safe fallback by default
-   +-- live Hugging Face model when HLM_ENABLE_LIVE_MODEL=true
+```bash
+export HLM_ENABLE_LIVE_MODEL=true
+export HLM_MODEL_NAME=meta-llama/Meta-Llama-3-8B-Instruct
+uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
 
-## Repository Layout
+Model access, hardware, licensing, and model-revision pinning are the operator's responsibility.
 
-```text
-api/                    FastAPI request schema and generation gateway
-benchmarks/             Deterministic latency benchmark harness
-deployment/             Docker Compose deployment blueprint
-hierarchical_lm/        Core config, tokenizer, dataset, and model package
-src/                    Extended encoder, RAG, provider, and ingestion prototypes
-tests/                  Unit, API contract, and tensor-shape regression tests
-benchmark-results.json  Recorded benchmark output
-metrics.md              Research metrics and quality summary
+## Container Quick Start
+
+```bash
+docker build -t hierarchical-language-model:local .
+docker run --rm -p 8000:8000 hierarchical-language-model:local
+curl http://localhost:8000/healthz
 ```
 
-## Pinecone vector retrieval
+The image currently serves `deployment/app.py`, whose health endpoint and document-ingestion contract are distinct from the richer `api/main.py` generation gateway. That boundary is intentional and documented rather than presenting the two surfaces as one service.
 
-The RAG layer supports two interchangeable vector-store backends:
+## Evidence and reproducibility
 
-| Backend | Use case | Credentials |
+A claim is portfolio-grade only when a reviewer can identify the command, input class, runtime, sample count, and artifact supporting it.
+
+| Evidence class | Reproduction path | Current boundary |
 |---|---|---|
-| `faiss` (default) | Offline development, CI, and reproducible local experiments | None |
-| `pinecone` | Hosted retrieval for a deployed service | `PINECONE_API_KEY`, index name, and namespace |
+| Correctness | `pytest --cov=api --cov=hierarchical_lm --cov-report=term-missing` | deterministic local/CI paths |
+| Static quality | Ruff + `compileall` | `api`, `hierarchical_lm`, `benchmarks`, `research`, `tests` |
+| Security hygiene | Bandit + `pip-audit` | source/dependency hygiene, not a penetration test |
+| Container | `docker build ...` | build validation, not runtime capacity |
+| Performance | `benchmarks/benchmark_hlm.py` | compact CPU synthetic workloads |
+| LLM smoke | `research/llm_from_scratch.py --mode smoke` | optimization/plumbing, not language quality |
+| Release | semantic tag + GitHub Release workflow | immutable source archive + checksum |
+| Package | semantic tag + GHCR workflow | versioned container image |
 
-Pinecone is opt-in. Create a Pinecone index whose dimension matches the configured embedding model, then configure the environment without committing secrets:
+### Clean-checkout reproduction checklist
+
+1. Record `git rev-parse HEAD`.
+2. Use Python 3.11.
+3. Install `requirements.txt` and `requirements-dev.txt` without modifying source.
+4. Run lint, format verification, tests, and import compilation.
+5. Regenerate `benchmark-results.json` with 100 iterations.
+6. Compare the command, workload definition, runtime, and hardware before comparing numerical results.
+7. Treat changed dependency/runtime/hardware environments as new experiment conditions.
+
+## Research-style benchmark and metrics
+
+### Research question
+
+What is the steady-state latency of the repository's compact deterministic preprocessing, model-forward, and fallback paths under a CPU execution environment?
+
+### Protocol
+
+The checked-in benchmark artifact records 100 iterations for four compact workloads. It reports mean, median, p95, minimum, and maximum latency. The artifact identifies the harness and CPU device, but it does not currently record detailed CPU model, OS, Python/PyTorch versions, warm-up count, memory use, concurrency, or commit SHA; those omissions are tracked as reproducibility improvements rather than silently inferred.
+
+### Checked-in reference results
+
+| Workload | Mean | Median | p95 | Evidence |
+|---|---:|---:|---:|---|
+| Tokenizer document encoding | 0.007402 ms | 0.006550 ms | 0.008000 ms | `benchmark-results.json` |
+| Dataset materialization | 0.028561 ms | 0.025100 ms | 0.044400 ms | `benchmark-results.json` |
+| Model forward pass | 2.207161 ms | 2.189750 ms | 2.790500 ms | `benchmark-results.json` |
+| API safe fallback generation | 0.000217 ms | 0.000200 ms | 0.000200 ms | `benchmark-results.json` |
+
+These are **single-process microbenchmark results**, not service-level latency, concurrent throughput, end-to-end request latency, or live Hugging Face generation performance.
+
+### Correctness/quality signals currently recorded
+
+| Signal | Recorded value | Interpretation |
+|---|---:|---|
+| Tests | 13 passing | test-case count, not exhaustive correctness |
+| Runtime package coverage | 87% | measured for `api` + `hierarchical_lm` scope |
+| Benchmark JSON validation | passing | structural validity only |
+| Live model downloads required by CI | 0 | deterministic CI path |
+
+### Threats to validity
+
+- synthetic compact inputs can underrepresent realistic document distributions
+- shared or different CPUs can materially alter latency
+- no current benchmark evidence supports concurrent-load or service-capacity claims
+- fallback generation is intentionally trivial and should not be compared with real model inference
+- one seed/run is insufficient for model-quality conclusions
+
+## From-scratch LLM research contract
+
+The repository includes a small decoder-only model to expose architecture and experiment mechanics rather than hide them behind a hosted API. Any future scaling-law claim should report at minimum parameter count `N`, training-token count `D`, estimated FLOPs, hardware, peak memory, held-out loss, train/validation gap, seed count, and fit residuals. A function such as `L(N,D) = E + A/N^alpha + B/D^beta` should only be fitted after multiple controlled experiment points exist.
+
+Before claiming post-training improvement, compare checkpoints on the same frozen evaluation suite and report uncertainty. Retrieval grounding should use retrieval metrics such as recall@k/MRR plus citation or grounded-answer metrics; safety work should separately report refusal/jailbreak/privacy regressions.
+
+See [`docs/llm-systems-research.md`](docs/llm-systems-research.md) for the extended research protocol.
+
+## Retrieval backends
+
+| Backend | Role | CI dependency |
+|---|---|---|
+| FAISS | default local/offline vector backend | none |
+| Pinecone | hosted opt-in vector store | excluded from deterministic CI |
+
+Example Pinecone configuration:
 
 ```bash
 cp .env.example .env
-# Set these values in .env or your deployment secret store:
+# Configure in .env or a secret store, never source control:
 VECTORSTORE_BACKEND=pinecone
 PINECONE_API_KEY=***
 PINECONE_INDEX_NAME=hlm-documents
@@ -234,116 +238,117 @@ PINECONE_NAMESPACE=hlm-documents
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 ```
 
-The embedding model above produces 384-dimensional vectors; the Pinecone index must use the same dimension and a compatible cosine metric. Ingest documents into the configured namespace:
+## CI and engineering gates
 
-```bash
-python -m src.ingest --folders data docs
+The existing workflow executes nine named hygiene tiers on Python 3.11:
+
+1. checkout
+2. Python setup
+3. dependency installation
+4. Ruff lint
+5. Ruff format verification
+6. import compilation
+7. pytest + coverage and from-scratch LLM smoke validation
+8. benchmark JSON generation/validation
+9. Docker build, Bandit, and `pip-audit`
+
+CI uploads the benchmark artifact for inspection. A green workflow demonstrates those gates passed for that revision; it does not by itself prove production readiness.
+
+## Release and package contract
+
+The v1.1.0 release-prep branch adds two explicit publishing paths:
+
+- **GitHub Release:** semantic tag `vX.Y.Z` → source archive + SHA-256 checksum + generated release notes
+- **GHCR:** semantic tag `vX.Y.Z` → `ghcr.io/coreyleath-code/hierarchical-language-model:vX.Y.Z` and `latest`
+
+The container image carries OCI source/version/revision/license labels so GitHub can associate the package with this repository.
+
+## Extended Q&A
+
+**Why use a hierarchical model when transformers exist?**  
+The hierarchical path is useful as an inspectable research baseline where sentence/document aggregation and tensor contracts are explicit. This repository does not claim that it outperforms modern transformers.
+
+**Does the benchmark prove the API is fast?**  
+No. It measures compact in-process functions and a deterministic fallback. A real API claim needs networked request measurements, concurrency, resource limits, error rate, and representative payloads.
+
+**Is the Pinecone path production-tested?**  
+No. Pinecone is an opt-in integration path. Deterministic CI does not require credentials or network access.
+
+**What does 87% coverage mean?**  
+It is the currently recorded coverage for the `api` and `hierarchical_lm` runtime package scope. It is not a claim that 87% of every prototype/research module is covered.
+
+**Why keep the live model disabled by default?**  
+To keep CI reproducible without gated credentials, large downloads, or GPU requirements and to separate deterministic software verification from external model availability.
+
+**Does the from-scratch smoke loss prove learning quality?**  
+No. It proves the optimization/training plumbing can execute on synthetic data. Language quality requires a real dataset, frozen evaluation protocol, multiple seeds, and statistical interpretation.
+
+**What would justify a production-serving claim?**  
+A pinned model/runtime, auth and rate limits, health/readiness semantics, load tests, p50/p95/p99 latency, TTFT/ITL for generation, error rates, resource/accelerator utilization, rollback evidence, observability, and an explicit operational owner.
+
+**Why publish a package?**  
+A versioned GHCR image makes the runtime artifact inspectable and pullable. It strengthens provenance, but it does not replace tests, SBOM/security evidence, or runtime validation.
+
+## Engineering roadmap
+
+### Phase 1 — benchmark provenance
+
+- record commit SHA, Python/PyTorch versions, OS, CPU model, warm-up count, seed, and memory in benchmark artifacts
+- add p99 and optional repeated-run confidence intervals
+- define an immutable benchmark fixture
+
+**Acceptance evidence:** versioned JSON schema and CI artifact containing complete environment/provenance fields.
+
+### Phase 2 — contract depth
+
+- expand negative API/input tests
+- add persistence/retrieval adapter contract tests
+- clearly separate core coverage from prototype-extension coverage
+
+**Acceptance evidence:** deterministic tests demonstrating failure semantics and backend contract behavior.
+
+### Phase 3 — supply chain
+
+- generate an SBOM for release images
+- scan the release image for fixable HIGH/CRITICAL vulnerabilities
+- sign published images with keyless Cosign
+- pin critical external action/dependency revisions where appropriate
+
+**Acceptance evidence:** release workflow artifacts plus verifiable image signature.
+
+### Phase 4 — model/retrieval research
+
+- introduce frozen datasets and multiple seeds
+- report held-out loss/perplexity with confidence intervals
+- evaluate retrieval recall@k/MRR and grounding separately
+- add documented data provenance, duplicate, and PII review
+
+**Acceptance evidence:** checked-in experiment manifests and machine-readable evaluation artifacts.
+
+### Phase 5 — serving validation
+
+- unify or deliberately version the deployment API and generation API boundaries
+- add auth, rate limiting, readiness, and structured telemetry
+- benchmark representative payloads under concurrency
+- report TTFT/ITL for live generation separately from deterministic fallback latency
+
+**Acceptance evidence:** reproducible load-test artifact, deployment config, rollback procedure, and observability evidence.
+
+## Repository layout
+
+```text
+api/                    FastAPI generation gateway
+benchmarks/             deterministic benchmark harness
+deployment/             container/deployment service boundary
+hierarchical_lm/        core hierarchical config/tokenizer/model package
+research/               from-scratch language-model experiments
+src/                    retrieval/provider/ingestion prototypes
+tests/                  deterministic unit and API contract tests
+docs/                   research and engineering documentation
+benchmark-results.json  checked-in reference benchmark artifact
+metrics.md              supporting metrics notes
 ```
 
-The existing `src/chains/rag.py` chain automatically loads the selected backend. Keep `VECTORSTORE_BACKEND=faiss` for local tests and CI; Pinecone credentials are never required for the deterministic fallback path. Pinecone network errors should be handled by the deployment's readiness and retry policy before exposing the RAG endpoint publicly.
+## License
 
-## Research Metrics And Benchmarks
-
-Latest recorded benchmark command:
-
-```bash
-python benchmarks/benchmark_hlm.py --iterations 100 --output benchmark-results.json
-python -m json.tool benchmark-results.json
-```
-
-| Benchmark | Mean latency | Median latency | p95 latency | Evidence |
-|---|---:|---:|---:|---|
-| Tokenizer document encoding | 0.007402 ms | 0.006550 ms | 0.008000 ms | `benchmark-results.json` |
-| Dataset materialization | 0.028561 ms | 0.025100 ms | 0.044400 ms | `benchmark-results.json` |
-| Model forward pass | 2.207161 ms | 2.189750 ms | 2.790500 ms | `benchmark-results.json` |
-| API safe fallback generation | 0.000217 ms | 0.000200 ms | 0.000200 ms | `benchmark-results.json` |
-
-| Quality signal | Recorded value |
-|---|---:|
-| Tests | 13 passing |
-| Runtime package coverage | 87% |
-| Benchmark JSON validation | Passing |
-| Live model downloads required for CI | 0 |
-| Case-conflicting tracked log files | Resolved to `dailylog.md` |
-
-See [metrics.md](metrics.md) for the full research metrics table and production target metrics.
-
-## 9 Tier Deployment Hygiene
-
-| Tier | Gate | Purpose |
-|---:|---|---|
-| 1 | Checkout source | Reproducible source snapshot |
-| 2 | Python runtime setup | Standard Ubuntu latest runtime with pip cache |
-| 3 | Dependency installation | Runtime and dev dependencies installed explicitly |
-| 4 | Ruff static lint | Syntax, import, and maintainability checks |
-| 5 | Ruff format verification | Consistent source formatting |
-| 6 | Python import compilation | Import-time and syntax validation |
-| 7 | Unit, API, and coverage tests | Regression coverage for core runtime behavior |
-| 8 | Benchmark JSON validation | Machine-readable performance evidence |
-| 9 | Docker, Bandit, and pip-audit | Deployment build, SAST, and dependency vulnerability hygiene |
-
-## Quick Start
-
-```bash
-python -m venv .venv
-. .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt -r requirements-dev.txt
-pytest
-```
-
-Run the API in safe fallback mode:
-
-```bash
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-curl -X POST http://localhost:8000/generate \
-  -H "Content-Type: application/json" \
-  -d '{"prompt":"Explain hierarchical reasoning","max_tokens":64}'
-```
-
-Enable live model generation only when credentials, hardware, and model access are ready:
-
-```bash
-export HLM_ENABLE_LIVE_MODEL=true
-export HLM_MODEL_NAME=meta-llama/Meta-Llama-3-8B-Instruct
-export HLM_MODEL_REVISION=main
-uvicorn api.main:app --host 0.0.0.0 --port 8000
-```
-
-## Validation
-
-```bash
-ruff check api hierarchical_lm benchmarks tests
-ruff format --check api hierarchical_lm benchmarks tests
-pytest --cov=api --cov=hierarchical_lm --cov-report=term-missing
-python benchmarks/benchmark_hlm.py --iterations 100 --output benchmark-results.json
-python -m json.tool benchmark-results.json
-python -m compileall -q api hierarchical_lm benchmarks tests src
-```
-
-## Deployment
-
-Build the container:
-
-```bash
-docker build -t hierarchical-language-model:latest .
-```
-
-Run the local deployment blueprint:
-
-```bash
-docker compose -f deployment/docker-compose.yml up --build
-```
-
-## Known Gaps
-
-- The deterministic benchmark uses compact synthetic inputs; it is not a large-corpus model-quality evaluation.
-- Live Hugging Face generation requires explicit opt-in and valid model access.
-- The RAG and dashboard modules remain prototype extensions and are not part of the core CI coverage gate.
-- Production auth, rate limiting, TLS, model registry controls, and observability backends should be added before internet-facing deployment.
-
-## Author
-
-Corey Leath
-
-AI / ML Engineer focused on LLM systems, MLOps, and distributed AI infrastructure.
+MIT. See [`LICENSE`](LICENSE).
