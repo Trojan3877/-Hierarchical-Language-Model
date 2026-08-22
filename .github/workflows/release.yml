@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Existing semantic version tag to publish"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.ref_name }}
+
+jobs:
+  release-artifacts:
+    name: Publish Release Artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Validate semantic release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid release tag: $RELEASE_TAG" >&2
+            exit 1
+          fi
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          fetch-depth: 0
+
+      - name: Verify tag exists
+        run: git rev-parse "refs/tags/$RELEASE_TAG" >/dev/null
+
+      - name: Build source archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          git archive --format=tar.gz \
+            --output "dist/hierarchical-language-model-${RELEASE_TAG}.tar.gz" \
+            "$RELEASE_TAG"
+          sha256sum "dist/hierarchical-language-model-${RELEASE_TAG}.tar.gz" \
+            > "dist/hierarchical-language-model-${RELEASE_TAG}.sha256"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          generate_release_notes: true
+          files: |
+            dist/hierarchical-language-model-${{ env.RELEASE_TAG }}.tar.gz
+            dist/hierarchical-language-model-${{ env.RELEASE_TAG }}.sha256
